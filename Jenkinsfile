@@ -26,7 +26,11 @@ pipeline {
         stage('Deploy Application') {
             steps {
                 echo '🚀 Deploying container...'
-                bat 'docker run -d -p 5000:5000 --name snakegame snakegame'
+                // Stop old container if running
+                bat '''
+                docker ps -q --filter "name=snakegame" | findstr . && docker stop snakegame && docker rm snakegame
+                docker run -d -p 5000:5000 --name snakegame snakegame
+                '''
             }
         }
     }
