@@ -19,7 +19,8 @@ pipeline {
         stage('Run Unit Tests') {
             steps {
                 echo '🧪 Running tests...'
-                bat 'docker run --rm snakegame pytest tests/'
+                // ✅ set working directory to /app to fix "No module named app"
+                bat 'docker run --rm -w /app snakegame pytest tests/'
             }
         }
 
