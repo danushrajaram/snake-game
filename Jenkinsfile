@@ -9,7 +9,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/<your-username>/snake-game.git'
+                git branch: 'main', url: 'https://github.com/danushrajaram/snake-game.git'
             }
         }
 
