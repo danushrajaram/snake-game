@@ -1,14 +1,10 @@
 pipeline {
     agent any
-    environment {
-        IMAGE_NAME = "snakegame"
-        CONTAINER_NAME = "snakegame"
-    }
 
     stages {
-
         stage('Checkout') {
             steps {
+                echo '📦 Checking out repository...'
                 git branch: 'main', url: 'https://github.com/danushrajaram/snake-game.git'
             }
         }
@@ -16,25 +12,21 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo '🧱 Building Docker image...'
-                sh 'docker build -t $IMAGE_NAME .'
+                bat 'docker build -t snakegame .'
             }
         }
 
         stage('Run Unit Tests') {
             steps {
                 echo '🧪 Running tests...'
-                sh 'docker run --rm $IMAGE_NAME pytest -q || true'
+                bat 'docker run --rm snakegame pytest tests/'
             }
         }
 
         stage('Deploy Application') {
             steps {
                 echo '🚀 Deploying container...'
-                sh '''
-                    docker stop $CONTAINER_NAME || true
-                    docker rm $CONTAINER_NAME || true
-                    docker run -d -p 5000:5000 --name $CONTAINER_NAME $IMAGE_NAME
-                '''
+                bat 'docker run -d -p 5000:5000 --name snakegame snakegame'
             }
         }
     }
